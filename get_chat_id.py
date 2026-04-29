@@ -1,0 +1,28 @@
+"""
+Run this script ONCE to get your Telegram Chat ID.
+Steps:
+1. Replace BOT_TOKEN below with your token from @BotFather
+2. Send any message to your bot in Telegram first
+3. Run: python get_chat_id.py
+4. Copy the chat_id from the output
+5. Paste it into telegram_alert.py
+"""
+
+import requests
+
+BOT_TOKEN = "7622745127:AAGbWp6X8m2vIM_fQwwtL4JgkwRMQNr53vQ"  # Replace this
+
+url = f"https://api.telegram.org/bot{BOT_TOKEN}/getUpdates"
+res = requests.get(url)
+data = res.json()
+
+if data.get("ok") and data.get("result"):
+    for update in data["result"]:
+        chat = update["message"]["chat"]
+        print(f"✅ Chat ID   : {chat['id']}")
+        print(f"   Your Name : {chat.get('first_name', '')} {chat.get('last_name', '')}")
+        print(f"   Username  : @{chat.get('username', 'N/A')}")
+else:
+    print("❌ No messages found.")
+    print("   → Make sure you sent a message to your bot in Telegram first!")
+    print(f"   Raw response: {data}")
